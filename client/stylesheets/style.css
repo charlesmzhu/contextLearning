@@ -57,7 +57,9 @@ body {
     margin: 7px 12px 0 0;
     float: left; }
   .post .post-content {
-    float: left; }
+    float: center;
+    text-align: center;
+    vertical-align: middle; }
     .post .post-content h3 {
       margin: 0;
       line-height: 1.4;

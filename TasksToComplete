@@ -1,0 +1,62 @@
+Tasks to Complete
+
+Small database
+- Store the entire document with all information in the parent document
+- Store just an array of ids of the nested document in the parent document
+- Store the id of the parent document on the child document
+Big/complex database
+
+
+Set up collections
+- Avoid repetition with
+	1. Words = new Mongo.Collection ( "words ");
+		- Date created
+		- Word id
+		- Fragments are embedded because we will have to constantly draw the information
+			-  
+		- Journal id array
+			- id1
+			- id2
+			- id3
+			- id4
+			- ...
+		- User
+			- Username
+			- id 
+	2. Journal = new Mongo.Collection ( "journal" )
+		- Date created
+		- Word id array:
+			- id1
+			- id2
+			- id3
+			- ...
+		- User
+			- Username
+			- id
+
+
+Set up templates with js files
+	1. "concept": Word center
+		- Display word
+	2. "contextItem": Context1
+	3. "contextItem": Context2
+	4. "input" Text input
+		- 
+	5. Layout
+		- JS file removes one
+
+Set up routes
+	1. 
+		Route
+	2. 
+
+Remove autopublish, make secure, etc.
+
+
+MVP iterations
+1. One word
+  - Click to display next wordd
+  - Add word
+2. Pre-set fragments
+3. User input of fragments
+4. Journal tabs and resizing
