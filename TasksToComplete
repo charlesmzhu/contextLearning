@@ -1,5 +1,17 @@
 Tasks to Complete
 
+5/7/2015
+- Made a just-barely working version of the app, but want to make it RESTful, i.e., the URL shows how you're getting there
+- In Microscope, it's done like this =>
+
+Router.route('/posts/:_id', { //:_id matches and passes to router's params array. Name and data are passed to client.
+  name: 'postPage', //name = name of route AND template name. To change template (while keeping name, pass function () { this.render('postPage') }
+  data: function () { return Posts.findOne( this.params._id ); }  //data = cursor passed to client.
+});
+
+-
+
+
 Small database
 - Store the entire document with all information in the parent document
 - Store just an array of ids of the nested document in the parent document

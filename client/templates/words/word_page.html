@@ -1,6 +1,14 @@
 <template name="wordPage">
     <div class="post">
-      <div id = "arrow-right" ></div>
-      {{ > wordItem word index }}
+      {{#if wordsInFront}}
+      	<div class = "arrow-right" ></div>
+      {{/if}}
+      {{#if wordsInBack}}
+      	<div class = "arrow-left" ></div>
+      {{/if}}
+      {{ > wordItem }}
     </div>
+    <form id = "submit-context">
+          <input type="text" name="text" placeholder="Type to add a new context" class ="full-width" />
+    </form>
 </template>

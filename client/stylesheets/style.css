@@ -40,7 +40,7 @@ body {
   position: relative;
   opacity: 1; }
 
-  .post #arrow-right {
+  .post .arrow-right {
     width: 0; 
     height: 0; 
     border-left: 20px solid #81BEF7;
@@ -51,6 +51,18 @@ body {
     top: 40%;
 
   }
+
+  .post .arrow-left {
+    width: 0; 
+    height: 0; 
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent; 
+    border-right:20px solid #81BEF7; 
+    position: absolute;
+    right: 97%;
+    top: 40%;
+  }
+
   .post:before, .post:after {
     content: "";
     display: table; }
@@ -161,4 +173,8 @@ body {
   z-index: 10000;
   padding: 10px;
   top: 0px;
+}
+
+.full-width {
+  width: 100%;
 }
