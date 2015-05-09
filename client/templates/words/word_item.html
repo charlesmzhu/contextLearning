@@ -1,10 +1,23 @@
 <template name="wordItem">
     <div class="post-content">
-      <h1>{{word}}</h1>
-	    {{#each contexts}}
-	    <br />
-	    {{ > contextItem }}
-	    <br />
-	    {{/each}}
+      <h1>{{#if wordsInFront ..}}
+      	<div class = "arrow-right" ></div>
+      {{/if}}
+      {{#if wordsInBack ..}}
+      	<div class = "arrow-left" ></div>
+      {{/if}}
+      
+      {{word}}</h1>
+	    
+      {{#each contexts}}
+	    
+      <br />
+	    
+      {{ > contextItem }}
+	    
+      <br />
+	    
+      {{/each}}
+    
     </div>
 </template>

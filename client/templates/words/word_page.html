@@ -1,11 +1,13 @@
 <template name="wordPage">
     <div class="post">
-      {{#if wordsInFront}}
-      	<div class = "arrow-right" ></div>
-      {{/if}}
-      {{#if wordsInBack}}
-      	<div class = "arrow-left" ></div>
-      {{/if}}
+    	<div class = "icons">
+		  <img src="icons/add-128.png" alt="Add" width="30" id ="addWord">
+  		  <img src="icons/note-128.png" alt="Edit" width="30" id = "editWord">
+		  <img src="icons/delete-128.png" alt="Delete" width="30" id = "deleteWord">
+		</div>
+	  {{ #if submittingNewWord }}
+	  	{{ > wordSubmit }}
+	  {{ /if }}
       {{ > wordItem }}
     </div>
       {{ > contextSubmit }}

@@ -7,9 +7,8 @@ Tasks to Complete
 	2. Use localStorage tokens.
 - To-do (* indicate priority for tomorrow)
 	1. Move arrows
-	2. Add a word*
+	2. Add a word*: add, edit, delete words
 	3. Delete a word
-	4. 
 
 5/7/2015
 - Made a just-barely working version of the app, but want to make it RESTful, i.e., the URL shows how you're getting there

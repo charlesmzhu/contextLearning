@@ -22,14 +22,20 @@ Template.wordPage.events ( {
 
 		//Meteor.call ( this._id, text );
 		return false;
+	},
+
+	//Clicking on add icon shows a box to type word in
+	"click #addWord": function ( e ) {
+		Session.set ( "submittingNewWord", true );
+		return false;
+	},
+
+	"blur #addWord": function ( e ) {
+		Session.set ( "submittingNewWord", false );
+		return false;
 	}
 } )
 
 Template.wordPage.helpers ({
-	wordsInFront: function () { 
-		return Words.state.indexOf (this._id) < Words.state.length - 1;
-	},
-	wordsInBack: function () {
-		return Words.state.indexOf (this._id) > 0;
-	}
+	submittingNewWord: function () { return Session.get("submittingNewWord"); }
 })
