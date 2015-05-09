@@ -1,5 +1,16 @@
 Tasks to Complete
 
+5/10/2015
+- When you go to an individual card's url, it loses where you were in the collection. But there isn't much of a use case for actually going to the URL. It might be better to just do everything over Sessions. Actually counterpoint: having the URL allows for one to come back to where they were - for example, they might have 100 flashcards.
+- TO implement this solution, we could
+	1. Make another Collection that stores the current array.
+	2. Use localStorage tokens.
+- To-do (* indicate priority for tomorrow)
+	1. Move arrows
+	2. Add a word*
+	3. Delete a word
+	4. 
+
 5/7/2015
 - Made a just-barely working version of the app, but want to make it RESTful, i.e., the URL shows how you're getting there
 - In Microscope, it's done like this =>

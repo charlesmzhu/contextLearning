@@ -14,7 +14,7 @@ Template.wordPage.events ( {
 		}
 	},
 
-	"submit #submit-context": function ( e ) {
+	"submit #context-submit": function ( e ) {
 		var text = event.target.text.value;
 		Meteor.call ( "addContext" , this._id, text )
 
@@ -27,7 +27,7 @@ Template.wordPage.events ( {
 
 Template.wordPage.helpers ({
 	wordsInFront: function () { 
-		return Words.state.indexOf (this._id) < Words.state.length -1;
+		return Words.state.indexOf (this._id) < Words.state.length - 1;
 	},
 	wordsInBack: function () {
 		return Words.state.indexOf (this._id) > 0;
