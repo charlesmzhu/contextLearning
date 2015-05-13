@@ -1,8 +1,8 @@
 <template name = "deckList">
 	<div class = "icons">
-	  <img src="icons/add-128.png" alt="Add" width="30" id ="addCollection">
-  	  <img src="icons/note-128.png" alt="Edit" width="30" id = "edit">
-	  <img src="icons/delete-128.png" alt="Delete" width="30" id = "deleteWord">
+	  <img src="/icons/add-128.png" alt="Add" width="30" id ="addCollection">
+  	  <img src="/icons/note-128.png" alt="Edit" width="30" id = "edit">
+	  <img src="/icons/delete-128.png" alt="Delete" width="30" id = "deleteWord">
 	</div>
 	<div class="post">
 		{{ #each decks }}
@@ -35,9 +35,9 @@
 <template name="wordPage">
     <div class="post">
     	<div class = "icons">
-		  <img src="icons/add-128.png" alt="Add" width="30" id ="addWord">
-  		  <img src="icons/note-128.png" alt="Edit" width="30" id = "editWord">
-		  <img src="icons/delete-128.png" alt="Delete" width="30" id = "deleteWord">
+		  <img src="/icons/add-128.png" alt="Add" width="30" id ="addWord">
+  		  <img src="/icons/note-128.png" alt="Edit" width="30" id = "editWord">
+		  <img src="/icons/delete-128.png" alt="Delete" width="30" id = "deleteWord">
 		</div>
 	  {{ #if submittingNewWord }}
 	  	{{ > wordSubmit }}
@@ -50,25 +50,25 @@
 
 <template name="wordItem">
     <div class="post-content">
-      <h1><!--{{#if wordsInFront ..}}
+      <!--{{#if wordsInFront ..}}
       	<div class = "arrow-right" ></div>
       {{/if}}
       {{#if wordsInBack ..}}
       	<div class = "arrow-left" ></div>
       {{/if}}-->
       
-      {{word}}</h1>
+      {{#with wordObj}}
+    <h1>{{ word }}</h1>
+        {{#each contexts}}
 	    
-      {{#each contexts}}
+        <br />
 	    
-      <br />
+        {{ > contextItem }}
 	    
-      {{ > contextItem }}
+        <br />
 	    
-      <br />
-	    
-      {{/each}}
-    
+        {{/each}}
+      {{ /with }}
     </div>
 </template>
 

@@ -1,3 +1,12 @@
+if (Decks.find().count() == 0 ) {
+  Decks.insert(
+    {
+      title: "Chinese lesson two on weightlifiting and body building",
+      wordIds: []
+    }
+  )
+}
+
 if (Words.find().count() == 0 ) {
 	 Words.insert({
     	word: 'insidious',
@@ -25,12 +34,3 @@ if (Words.find().count() == 0 ) {
         "Bordered on the north by Tennessee, on the east by Alabama, on the south by Louisiana and a narrow coast on the Gulf of Mexico; and on the west, across the Mississippi River, by Louisiana and Arkansas."]
   	});
 } 
-
-if (Decks.find().count() == 0 ) {
-  Decks.insert(
-    {
-      title: "Chinese lesson two on weightlifiting and body building",
-      wordIds: []
-    }
-  )
-}

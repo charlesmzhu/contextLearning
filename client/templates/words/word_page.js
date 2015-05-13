@@ -25,7 +25,6 @@ Template.deckList.helpers ( {
 
 Template.deckList.events ( { 
 	"submit #beginTest": function ( e ) {
-		console.log("Fired!");
 		var wordArray = _.shuffle ( this.wordIds );
 		Decks.update ( this._id , { $set: { wordIds: wordArray } } );
 		Decks.update ( this._id , { $set: { sessionIndex: 0 } } );
@@ -97,6 +96,18 @@ Template.wordPage.helpers ({
 })
 
 Template.wordItem.helpers({
+	wordObj: function () { 
+		var controller = Iron.controller();
+		var index = controller.params.wordIndex;
+		var id = controller.params._id;
+		var wordsObject = Decks.findOne ( id, 
+					{ fields: { 'wordIds': 1 } } 
+				);
+		var wordId = wordsObject.wordIds[index];
+		return Words.findOne ( wordId );
+	},
+
+
 	wordsInFront: function ( parentContext ) { 
 		return Words.state.indexOf (parentContext._id) < Words.state.length - 1;
 	},
