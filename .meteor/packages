@@ -8,6 +8,5 @@ meteor-platform
 insecure
 twbs:bootstrap
 underscore
-autopublish
 iron:router
 coffeescript

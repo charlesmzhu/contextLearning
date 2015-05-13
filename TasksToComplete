@@ -1,5 +1,13 @@
 Tasks to Complete
 
+5/11/2015
+- Thigns have become untenable at this point in terms of how words are served. A new implementation decision:
+
+  1. Create word collection pages - that's the new home page - sets of words.
+  2. You can also see all words on a page
+  3. The only way you can persist your shuffled client array is with having a user property called 'currentSet' that contains an object containing both an currentId and an array pointing to every word id.
+
+
 5/10/2015
 - When you go to an individual card's url, it loses where you were in the collection. But there isn't much of a use case for actually going to the URL. It might be better to just do everything over Sessions. Actually counterpoint: having the URL allows for one to come back to where they were - for example, they might have 100 flashcards.
 - TO implement this solution, we could

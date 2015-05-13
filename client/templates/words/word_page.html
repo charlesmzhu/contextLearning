@@ -1,3 +1,37 @@
+<template name = "deckList">
+	<div class = "icons">
+	  <img src="icons/add-128.png" alt="Add" width="30" id ="addCollection">
+  	  <img src="icons/note-128.png" alt="Edit" width="30" id = "edit">
+	  <img src="icons/delete-128.png" alt="Delete" width="30" id = "deleteWord">
+	</div>
+	<div class="post">
+		{{ #each decks }}
+			{{ title }}
+<!--			{{#if stateExists}}
+				{{progressBar}}
+				<button type = "submit" class = "btn btn-default" id ="resumeTest">Resume test</button>
+				<button type = "submit" class = "btn btn-default" id ="reset"> Reset </button>
+			{{else}}-->
+			<form id = "beginTest">
+				<button type = "submit" class = "btn btn-default" id ="beginTest-button">Begin test</button>
+			</form>
+<!--			{{/if}}-->
+			
+		{{/each}}
+	</div>
+	{{ > wordSubmit }}
+
+	{{#each words}}
+		{{word}}
+	{{/each}}
+
+	<div class = "post col-sm-8">
+		Test
+	</div>
+
+</template>
+
+
 <template name="wordPage">
     <div class="post">
     	<div class = "icons">
@@ -11,4 +45,48 @@
       {{ > wordItem }}
     </div>
       {{ > contextSubmit }}
+</template>
+
+
+<template name="wordItem">
+    <div class="post-content">
+      <h1><!--{{#if wordsInFront ..}}
+      	<div class = "arrow-right" ></div>
+      {{/if}}
+      {{#if wordsInBack ..}}
+      	<div class = "arrow-left" ></div>
+      {{/if}}-->
+      
+      {{word}}</h1>
+	    
+      {{#each contexts}}
+	    
+      <br />
+	    
+      {{ > contextItem }}
+	    
+      <br />
+	    
+      {{/each}}
+    
+    </div>
+</template>
+
+<template name="wordSubmit">
+	<form id = "word-submit">
+          <input id ="word-submit-text" type="text" name="text" placeholder="Type to add new word" class ="full-width" />
+          <input type = "submit" value = "Add word" >
+    </form>
+
+    {{ > contextSubmit }}
+</template>
+
+<template name = "contextItem">
+	{{this}}
+</template>
+
+<template name = "contextSubmit">
+	<form id = "context-submit">
+          <input type="text" name="text" placeholder="Type to add a new context" class ="full-width" />
+    </form>
 </template>
