@@ -23,7 +23,7 @@
 
 	<div class = "post col-sm-4">
 		{{#each words}}
-			<span class = "label label-default" draggable="true" id="label_{{word}}">{{word}}</span>
+			<span class = "label label-default" draggable="true">{{word}}</span>
 		{{/each}}
 	</div>
 	
@@ -56,16 +56,25 @@
 
 
 <template name="wordItem">
-    <div class="post-content">
-      <!--{{#if wordsInFront ..}}
-      	<div class = "arrow-right" ></div>
-      {{/if}}
-      {{#if wordsInBack ..}}
-      	<div class = "arrow-left" ></div>
-      {{/if}}-->
       
       {{#with wordObj}}
-    <h1>{{ word }}</h1>
+    <h1>
+    	{{ word }}
+		
+		{{#if wordsInFront }}
+			<div class = "arrow-right" ></div>
+        {{/if}}
+
+        {{#if wordsInBack }}
+      	  	<div class = "arrow-left" ></div>
+        {{/if}}
+
+    </h1>
+
+    <div class="post-content">
+      	
+      	  
+
         {{#each contexts}}
 	    
         <br />
@@ -73,8 +82,11 @@
         <br />
 	    
         {{/each}}
-      {{ /with }}
-    </div>
+    
+	</div>
+    
+    {{ /with }}
+    
 </template>
 
 <template name="wordSubmit">
@@ -82,8 +94,6 @@
           <input id ="word-submit-text" type="text" name="text" placeholder="Type to add new word" class ="full-width" />
           <input type = "submit" value = "Add word" >
     </form>
-
-    {{ > contextSubmit }}
 </template>
 
 <template name = "contextItem">

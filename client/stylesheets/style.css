@@ -87,7 +87,7 @@ body {
     text-align: center;
     vertical-align: middle; }
 
-    .post .post-content h1 .arrow-right {
+    .post h1 .arrow-right {
       width: 0; 
       height: 0; 
       border-left: 20px solid #5CB8E6;
@@ -95,7 +95,7 @@ body {
       border-top: 15px solid transparent;
       position: absolute;
       left: 75%;
-      top: 0%;
+      top: 50%;
     }
 
     .drag-over {
@@ -107,7 +107,7 @@ body {
       position: relative;
     }
 
-    .post .post-content h1 .arrow-left {
+    .post h1 .arrow-left {
       width: 0; 
       height: 0; 
       border-top: 15px solid transparent;
@@ -115,7 +115,7 @@ body {
       border-right:20px solid #5CB8E6; 
       position: absolute;
       right: 75%%;
-      top: 0%;
+      top: 50%;
     }
 
     .post .post-content h3 {

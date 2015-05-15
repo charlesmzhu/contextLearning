@@ -25,9 +25,10 @@ Template.deckList.helpers ( {
 
 Template.deckList.events ( { 
 	"submit #beginTest": function ( e ) {
+		var start = parseInt(0);
 		var wordArray = _.shuffle ( this.wordIds );
 		Decks.update ( this._id , { $set: { wordIds: wordArray } } );
-		Decks.update ( this._id , { $set: { sessionIndex: 0 } } );
+		Decks.update ( this._id , { $set: { sessionIndex: start } } );
 		Router.go ( '/' + this._id + '/' + Decks.findOne ( this._id, 
 					{ fields: { 'sessionIndex': 1 } } 
 				).sessionIndex 
@@ -100,16 +101,21 @@ Decks.findOne ( deckId,
 Template.wordPage.events ( { 
 
 	"click .arrow-right": function ( e ) { // As long as there's another
-		if ( Words.state.indexOf ( this._id ) < Words.state.currentSet.length ) {	
-			var nextId = Words.state.currentSet [ Words.state.indexOf (this._id) + 1 ]._id;
-			Router.go("/" + nextId);
+		var deckId = Session.get("deckId");
+		if ( Session.get ( "indexOfWord" ) < Session.get ("wordIds").length ) {	
+			Decks.update ( deckId, { $inc : { sessionIndex: parseInt(1) } }, function ( e, d ) {
+				var indexOfWord = Decks.findOne ( deckId, { fields: { "sessionIndex": 1 } } ).sessionIndex;
+				Router.go( "/" + deckId + "/" + indexOfWord );
+
+				console.log(typeof(indexOfWord))	
+			});
 		}
 	},
 
 	"click .arrow-left": function ( e ) { // As long as there's another
-		if ( Words.state.indexOf ( this._id ) > 0 ) {	
+		if ( Session.get ( "indexOfWord" ) > 0 ) {	
 			var prevId = Words.state.currentSet [ Words.state.indexOf (this._id) - 1 ]._id;
-			Router.go("/" + prevId);
+			Router.go("../" + prevId);
 		}
 	},
 
@@ -137,21 +143,25 @@ Template.wordPage.helpers ({
 Template.wordItem.helpers({
 	wordObj: function () { 
 		var controller = Iron.controller();
-		var index = controller.params.wordIndex;
-		var id = controller.params._id;
-		var wordsObject = Decks.findOne ( id, 
+		var indexOfWord = controller.params.indexOfWord;//index of word within the larger deck
+		var deckId = controller.params._id;//id of deck
+		var wordIds = Decks.findOne ( deckId, //finds the array of wor ids the deck
 					{ fields: { 'wordIds': 1 } } 
-				);
-		var wordId = wordsObject.wordIds[index];
+				).wordIds;
+		Decks.update ( deckId, { $set: { sessionIndex: parseInt(indexOfWord) }});
+		Session.set ( "indexOfWord", indexOfWord );
+		Session.set ( "wordIds", wordIds );
+		Session.set ( "deckId", deckId ); //Should change this to just the URI, don't need to update this
+		var wordId = wordIds[indexOfWord];//gets the specific wordId
 		return Words.findOne ( wordId );
 	},
 
 
-	wordsInFront: function ( parentContext ) { 
-		return Words.state.indexOf (parentContext._id) < Words.state.length - 1;
+	wordsInFront: function () { 
+		return parseInt ( Session.get ( "indexOfWord" ) ) < Session.get ("wordIds").length;
 	},
-	wordsInBack: function ( parentContext ) {
-		return Words.state.indexOf (parentContext._id) > 0;
+	wordsInBack: function () {
+		return parseInt ( Session.get ( "indexOfWord" ) ) > 0;
 	}
 })
 
@@ -168,11 +178,6 @@ Template.wordSubmitLarge.events ({
 		Meteor.call ( "addWord" , text );
 		return false;
 	}
-/*	"blur #word-submit": function ( e ) {
-		Session.set ( "submittingNewWord", false );
-		return false;
-	},
-*/
 })
 
 
@@ -186,12 +191,13 @@ Template.wordSubmit.events ({
 		event.target.text.value = "";
 		Session.set ( "submittingNewWord", false);
 		
-	}
-/*	"blur #word-submit": function ( e ) {
+	},
+
+	"blur #word-submit": function ( e ) {
 		Session.set ( "submittingNewWord", false );
 		return false;
 	},
-*/
+
 })
 
 
