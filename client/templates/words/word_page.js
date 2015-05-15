@@ -159,6 +159,23 @@ Template.wordSubmit.rendered = function () {
 	$("#word-submit > input[name='text']").focus();
 }
 
+Template.wordSubmitLarge.events ({
+	"submit .bigtextbox": function ( e ) {
+		console.log("Fired: ");
+		e.preventDefault();
+		var text = e.target.word.value;
+		console.log(text);
+		Meteor.call ( "addWord" , text );
+		return false;
+	}
+/*	"blur #word-submit": function ( e ) {
+		Session.set ( "submittingNewWord", false );
+		return false;
+	},
+*/
+})
+
+
 Template.wordSubmit.events ({
 	"submit #word-submit": function ( e ) {
 		console.log("Fired: ");

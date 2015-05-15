@@ -45,7 +45,7 @@ body {
     margin: 6px;
   }
 
-  #bigtextbox {
+  .bigtextbox {
     border: 2px;
     position: relative;
     padding: 4px;
@@ -55,6 +55,11 @@ body {
     font-size: 50px;
     outline: none;
   }
+
+    .bigtextbox #textbox {
+      width: 100%;
+      text-align: center;
+    }
 
   .post:before, .post:after {
     content: "";
@@ -202,4 +207,5 @@ body {
 
 .full-width {
   width: 100%;
+  text-align: center;
 }
