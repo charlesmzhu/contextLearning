@@ -106,8 +106,6 @@ Template.wordPage.events ( {
 			Decks.update ( deckId, { $inc : { sessionIndex: parseInt(1) } }, function ( e, d ) {
 				var indexOfWord = Decks.findOne ( deckId, { fields: { "sessionIndex": 1 } } ).sessionIndex;
 				Router.go( "/" + deckId + "/" + indexOfWord );
-
-				console.log(typeof(indexOfWord))	
 			});
 		}
 	},
@@ -142,12 +140,16 @@ Template.wordPage.helpers ({
 
 Template.wordItem.helpers({
 	wordObj: function () { 
-		var controller = Iron.controller();
-		var indexOfWord = controller.params.indexOfWord;//index of word within the larger deck
-		var deckId = controller.params._id;//id of deck
+//		var controller = Iron.controller();
+		var indexOfWord = this.params.indexOfWord;//index of word within the larger deck
+		var deckId = this.params._id;//id of deck
+		
 		var wordIds = Decks.findOne ( deckId, //finds the array of wor ids the deck
 					{ fields: { 'wordIds': 1 } } 
 				).wordIds;
+
+		console.log("i: " + indexOfWord + " deck: " + deckId);
+
 		Decks.update ( deckId, { $set: { sessionIndex: parseInt(indexOfWord) }});
 		Session.set ( "indexOfWord", indexOfWord );
 		Session.set ( "wordIds", wordIds );
@@ -171,7 +173,6 @@ Template.wordSubmit.rendered = function () {
 
 Template.wordSubmitLarge.events ({
 	"submit .bigtextbox": function ( e ) {
-		console.log("Fired: ");
 		e.preventDefault();
 		var text = e.target.word.value;
 		console.log(text);
@@ -183,7 +184,6 @@ Template.wordSubmitLarge.events ({
 
 Template.wordSubmit.events ({
 	"submit #word-submit": function ( e ) {
-		console.log("Fired: ");
 		e.preventDefault();
 		var text = event.target.text.value;
 		Meteor.call ( "addWord" , text );
