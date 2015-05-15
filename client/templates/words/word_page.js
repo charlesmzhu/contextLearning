@@ -34,9 +34,48 @@ Template.deckList.events ( {
 			);
 		return false;
 	},
+
+	"dragstart .label-default": function ( e ) {
+		var id = Words.findOne( { word: e.target.innerHTML }, 
+			{ fields: { _id: 1 } } )._id;
+		Session.set ("draggedWord", id);
+	},
+
+	'dragover .deck .title' : function ( e ) {
+		e.preventDefault();
+		$(e.currentTarget).addClass ( "drag-over" );
+	},
+
+	'dragleave .deck .title' : function( e ) {
+		e.preventDefault();
+    	$(e.currentTarget).removeClass( "drag-over" );
+  	},
+
+	"drop .deck .title": function (e) {
+		var deckId = Blaze.getData ( e.target )._id;
+		var wordId = Session.get ( "draggedWord" )
+		Decks.update ( deckId,
+			{ $push: { wordIds: wordId } },  
+			{ upsert: true } );
+		$(e.currentTarget).removeClass( "drag-over" );	
+	},
+
 } );
 
 /*
+Template.deckList.rendered = function () {
+	$(".label-default").draggable ({
+
+	});
+
+	$(".deck").droppable({
+		accept: ".label-default",
+		drop: function () {
+
+		}
+	});
+}
+ 
 var deck = Decks.find().fetch()[0];
 var deckId = deck._id;
 var word = Words.find().fetch()[0];

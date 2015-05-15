@@ -45,6 +45,17 @@ body {
     margin: 6px;
   }
 
+  #bigtextbox {
+    border: 2px;
+    position: relative;
+    padding: 4px;
+    text-align: center;
+    vertical-align: center;
+    font-family: Helvetica;
+    font-size: 50px;
+    outline: none;
+  }
+
   .post:before, .post:after {
     content: "";
     display: table; }
@@ -80,6 +91,11 @@ body {
       position: absolute;
       left: 75%;
       top: 0%;
+    }
+
+    .drag-over {
+      background-color: #99CCFF;
+      border: 2px;
     }
 
     .post .post-content h1 {
