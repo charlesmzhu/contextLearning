@@ -1,5 +1,6 @@
 Template.deckList.helpers ( {
 	decks: function () { 
+		Session.set("addDeckButtonClicked", false)
 		return Decks.find(); 
 	},
 
@@ -20,10 +21,19 @@ Template.deckList.helpers ( {
 		return Decks.findOne ( { _id: this._id }, 
 					{ fields: { 'sessionIndex': 1 } } 
 				).sessionIndex;
+	},
+
+	addDeckButtonClicked : function() {
+		return Session.get ( "addDeckButtonClicked" );
 	}
 } )
 
 Template.deckList.events ( { 
+	"click .btn.btn-primary": function (e) {
+		Session.set ( "addDeckButtonClicked", true );
+		return false;
+	},
+
 	"submit #beginTest": function ( e ) {
 		var start = parseInt(0);
 		var wordArray = _.shuffle ( this.wordIds );
@@ -48,6 +58,16 @@ Template.deckList.events ( {
 	},
 
 	'dragleave .deck .title' : function( e ) {
+		e.preventDefault();
+    	$(e.currentTarget).removeClass( "drag-over" );
+  	},
+
+  	'mouseover .deck .title' : function ( e ) {
+		e.preventDefault();
+		$(e.currentTarget).addClass ( "drag-over" );
+	},
+
+	'mouseout .deck .title' : function( e ) {
 		e.preventDefault();
     	$(e.currentTarget).removeClass( "drag-over" );
   	},
@@ -102,7 +122,7 @@ Template.wordPage.events ( {
 
 	"click .arrow-right": function ( e ) { // As long as there's another
 		var deckId = Session.get("deckId");
-		if ( Session.get ( "indexOfWord" ) < Session.get ("wordIds").length ) {	
+		if ( Session.get ( "indexOfWord" ) < Session.get ("wordIds").length-1 ) {	
 			Decks.update ( deckId, { $inc : { sessionIndex: parseInt(1) } }, function ( e, d ) {
 				var indexOfWord = Decks.findOne ( deckId, { fields: { "sessionIndex": 1 } } ).sessionIndex;
 				Router.go( "/" + deckId + "/" + indexOfWord );
@@ -111,9 +131,10 @@ Template.wordPage.events ( {
 	},
 
 	"click .arrow-left": function ( e ) { // As long as there's another
+		var deckId = Session.get("deckId");
 		if ( Session.get ( "indexOfWord" ) > 0 ) {	
-			var prevId = Words.state.currentSet [ Words.state.indexOf (this._id) - 1 ]._id;
-			Router.go("../" + prevId);
+			var prevIndex = Session.get("indexOfWord") - 1;
+			Router.go("/" + deckId + "/" + prevIndex);//Can probably do this via route paths
 		}
 	},
 
@@ -139,19 +160,15 @@ Template.wordPage.helpers ({
 })
 
 Template.wordItem.helpers({
-	wordObj: function () { 
-//		var controller = Iron.controller();
+	wordObj: function () { //the route object has been passed to these helpers
 		var indexOfWord = this.params.indexOfWord;//index of word within the larger deck
 		var deckId = this.params._id;//id of deck
 		
 		var wordIds = Decks.findOne ( deckId, //finds the array of wor ids the deck
 					{ fields: { 'wordIds': 1 } } 
 				).wordIds;
-
-		console.log("i: " + indexOfWord + " deck: " + deckId);
-
 		Decks.update ( deckId, { $set: { sessionIndex: parseInt(indexOfWord) }});
-		Session.set ( "indexOfWord", indexOfWord );
+		Session.set ( "indexOfWord", parseInt(indexOfWord) );
 		Session.set ( "wordIds", wordIds );
 		Session.set ( "deckId", deckId ); //Should change this to just the URI, don't need to update this
 		var wordId = wordIds[indexOfWord];//gets the specific wordId
@@ -160,7 +177,7 @@ Template.wordItem.helpers({
 
 
 	wordsInFront: function () { 
-		return parseInt ( Session.get ( "indexOfWord" ) ) < Session.get ("wordIds").length;
+		return parseInt ( Session.get ( "indexOfWord" ) ) < Session.get ("wordIds").length -1 ;
 	},
 	wordsInBack: function () {
 		return parseInt ( Session.get ( "indexOfWord" ) ) > 0;

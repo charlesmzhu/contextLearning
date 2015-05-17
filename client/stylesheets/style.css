@@ -30,6 +30,10 @@ body {
     margin: 10px;
   }
 
+  .navbar a { 
+    text-decoration: none;
+  }
+
 #spinner {
   height: 300px; }
 
@@ -43,6 +47,15 @@ body {
 
   .post .icons > img {
     margin: 6px;
+  }
+
+  .post.deck.title{
+    position: relative;
+    text-align: left;
+  }
+
+  .post.deck.title form {
+    text-align: right;
   }
 
   .bigtextbox {
@@ -87,15 +100,15 @@ body {
     text-align: center;
     vertical-align: middle; }
 
-    .post h1 .arrow-right {
+    .post .arrow-right {
       width: 0; 
       height: 0; 
       border-left: 20px solid #5CB8E6;
       border-bottom: 15px solid transparent;
       border-top: 15px solid transparent;
       position: absolute;
-      left: 75%;
-      top: 50%;
+      left: 90%;
+      top: 10%;
     }
 
     .drag-over {
@@ -103,19 +116,24 @@ body {
       border: 2px;
     }
 
-    .post .post-content h1 {
+    .post h1 {
       position: relative;
+      font-size: 60px;
     }
 
-    .post h1 .arrow-left {
+    .post .arrow-left {
       width: 0; 
       height: 0; 
       border-top: 15px solid transparent;
       border-bottom: 15px solid transparent; 
       border-right:20px solid #5CB8E6; 
       position: absolute;
-      right: 75%%;
-      top: 50%;
+      right: 90%%;
+      top: 10%;
+    }
+
+    .post .large {
+      font-size: 20px;
     }
 
     .post .post-content h3 {

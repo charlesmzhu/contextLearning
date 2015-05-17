@@ -1,5 +1,17 @@
 Tasks to Complete
 
+5/16/2015
+Things are shaping up. Remaining to-do list:
+
+1. Activate new collection submission.
+2. Only show context when necessary. Prevent identical sumbissions of words.
+3. Animations.
+4. Add context log
+5. Add users
+6. Give users points when they use multiple contexts for a word
+7. CSS!
+
+
 5/11/2015
 - Thigns have become untenable at this point in terms of how words are served. A new implementation decision:
 
