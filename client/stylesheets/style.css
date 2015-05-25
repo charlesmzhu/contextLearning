@@ -49,6 +49,12 @@ body {
     margin: 6px;
   }
 
+  .post .label-default {
+    font-size: 18px;
+    padding: 2px;
+    margin: 2px;
+  }
+
   .post.deck.title{
     position: relative;
     text-align: left;
@@ -130,6 +136,10 @@ body {
       position: absolute;
       right: 90%%;
       top: 10%;
+    }
+
+    .post.deck.title .deck-ops {
+      float: right;
     }
 
     .post .large {

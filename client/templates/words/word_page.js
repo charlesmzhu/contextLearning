@@ -22,10 +22,12 @@ Template.deckList.helpers ( {
 					{ fields: { 'sessionIndex': 1 } } 
 				).sessionIndex;
 	},
-
+/*
 	addDeckButtonClicked : function() {
 		return Session.get ( "addDeckButtonClicked" );
 	}
+*/
+
 } )
 
 Template.deckList.events ( { 
@@ -33,8 +35,20 @@ Template.deckList.events ( {
 		Session.set ( "addDeckButtonClicked", true );
 		return false;
 	},
+/*
+	"blur #deck-submit": function ( e ) {
+		Session.set ( "addDeckButtonClicked", false );
+		return false;
+	},*/
 
-	"submit #beginTest": function ( e ) {
+	"submit #deck-submit": function ( e ) {
+		e.preventDefault();
+		var text = e.target.text.value;
+		Meteor.call ( "addDeck" , text );
+		return false;
+	},
+
+	"click .beginTest": function ( e ) {
 		var start = parseInt(0);
 		var wordArray = _.shuffle ( this.wordIds );
 		Decks.update ( this._id , { $set: { wordIds: wordArray } } );
@@ -44,6 +58,10 @@ Template.deckList.events ( {
 				).sessionIndex 
 			);
 		return false;
+	},
+
+	"click .deleteDeck": function ( e ) {
+		Meteor.call ( "deleteDeck", this._id )
 	},
 
 	"dragstart .label-default": function ( e ) {
@@ -73,12 +91,18 @@ Template.deckList.events ( {
   	},
 
 	"drop .deck .title": function (e) {
-		var deckId = Blaze.getData ( e.target )._id;
-		var wordId = Session.get ( "draggedWord" )
-		Decks.update ( deckId,
-			{ $push: { wordIds: wordId } },  
-			{ upsert: true } );
-		$(e.currentTarget).removeClass( "drag-over" );	
+		var deck = Blaze.getData ( e.target );
+		console.log(deck);
+		var wordId = Session.get ( "draggedWord" );
+		console.log(wordId);
+		if ( deck.wordIds.indexOf(wordId) != -1 ) {
+			alert("Word is already in deck!");
+		} else {
+			Decks.update ( deck._id,
+				{ $push: { wordIds: wordId } },  
+				{ upsert: true } );
+			$(e.currentTarget).removeClass( "drag-over" );
+		}	
 	},
 
 } );
@@ -187,16 +211,6 @@ Template.wordItem.helpers({
 Template.wordSubmit.rendered = function () {
 	$("#word-submit > input[name='text']").focus();
 }
-
-Template.wordSubmitLarge.events ({
-	"submit .bigtextbox": function ( e ) {
-		e.preventDefault();
-		var text = e.target.word.value;
-		console.log(text);
-		Meteor.call ( "addWord" , text );
-		return false;
-	}
-})
 
 
 Template.wordSubmit.events ({
