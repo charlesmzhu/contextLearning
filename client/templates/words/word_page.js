@@ -107,6 +107,16 @@ Template.deckList.events ( {
 
 } );
 
+Template.wordSubmitLarge.events ({
+	"submit .bigtextbox": function ( e ) {
+		e.preventDefault();
+		var text = e.target.word.value;
+		console.log(text);
+		Meteor.call ( "addWord" , text );
+		return false;
+	}
+})
+
 /*
 Template.deckList.rendered = function () {
 	$(".label-default").draggable ({
