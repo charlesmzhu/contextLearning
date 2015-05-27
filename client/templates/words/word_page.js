@@ -69,7 +69,13 @@ Template.deckList.events ( {
 			{ fields: { _id: 1 } } )._id;
 		Session.set ("draggedWord", id);
 	},
-
+/*
+	"dragstart .deck": function ( e ) {
+		var id = Words.findOne( { word: e.target.innerHTML }, 
+			{ fields: { _id: 1 } } )._id;
+		Session.set ("draggedDeck", id);
+	},
+*/
 	'dragover .deck .title' : function ( e ) {
 		e.preventDefault();
 		$(e.currentTarget).addClass ( "drag-over" );
@@ -92,17 +98,67 @@ Template.deckList.events ( {
 
 	"drop .deck .title": function (e) {
 		var deck = Blaze.getData ( e.target );
-		console.log ( deck );
 		var wordId = Session.get ( "draggedWord" );
-		console.log(wordId);
 		if ( deck.wordIds.indexOf(wordId) != -1 ) {
 			alert("Word is already in deck!");
 		} else {
+
+			//Update deck with the wordId
 			Decks.update ( deck._id,
 				{ $push: { wordIds: wordId } },  
 				{ upsert: true } );
+
+			//Update the word with deckId
+			var deckIds = Words.findOne ( wordId , 
+					{ fields: { 'deckIds': 1 } } 
+				).deckIds;
+
+				//Check if deckIds exist, e.g. if word has been dropped into deck
+				if ( typeof deckIds == "undefined" ) {
+					var emptyArr;
+					emptyArr = [];
+					Words.update ( wordId , { $set: { deckIds: emptyArr } } );
+				}
+
+				//Update word with deckId
+				Words.update( wordId, { $push: { deckIds: deck._id } } );	
+
+			//Get rid of drag-over class
 			$(e.currentTarget).removeClass( "drag-over" );
-		}	
+		}
+		return false;	
+	},
+
+	'dragover .drop-to-delete' : function ( e ) {
+		e.preventDefault();
+		$(e.currentTarget).addClass ( "drag-over" );
+	},
+
+	'dragleave .drop-to-delete' : function( e ) {
+		e.preventDefault();
+    	$(e.currentTarget).removeClass( "drag-over" );
+  	},
+
+	"drop .drop-to-delete": function (e) {
+		var item = Blaze.getData ( e.target );
+		console.log ( item );
+		var itemId = Session.get ( "draggedWord" );
+		console.log(itemId);
+		var alert = confirm("Are you sure you want to delete?");
+		if ( alert == true ) {
+			var deckIds =  Words.findOne ( itemId , 
+					{ fields: { 'deckIds': 1 } } 
+				).deckIds;
+
+			//First removes words from decks
+			for ( var i = 0 ; i < deckIds.length; i++ ) {
+				Meteor.call ( "removeWordFromDeck", deckIds[i], itemId );
+			}
+
+			//Then removes word completely
+			Meteor.call ( "removeWord", itemId );
+		}
+		return false;
 	},
 
 } );
@@ -117,41 +173,6 @@ Template.wordSubmitLarge.events ({
 	}
 })
 
-/*
-Template.deckList.rendered = function () {
-	$(".label-default").draggable ({
-
-	});
-
-	$(".deck").droppable({
-		accept: ".label-default",
-		drop: function () {
-
-		}
-	});
-}
- 
-var deck = Decks.find().fetch()[0];
-var deckId = deck._id;
-var word = Words.find().fetch()[0];
-var wordId = word._id;
-
-Decks.update ( deckId , { $set: { wordIds: [wordId] } } )
-Decks.update ( deckId , { $set: { sessionIndex: 0 } } )
-
-Decks.findOne ( deckId , 
-					{ fields: { 'wordIds': 1, _id: 0 } } 
-				)
-
-Decks.findOne ( deckId, 
-					{ fields: { 'sessionIndex': 1 } } 
-				).sessionIndex 
-
-Decks.findOne ( deckId, 
-					{ fields: { 'wordIds': 1, 'id': 0 } } 
-				).wordIds[index]
-
-*/
 Template.wordPage.events ( { 
 
 	"click .arrow-right": function ( e ) { // As long as there's another

@@ -15,7 +15,7 @@
 <!--		{{/if}} -->
 		</div>
 		{{ #each decks }}
-			<div class = "post deck title">{{ title }}
+			<div class = "post deck title" draggable="true">{{ title }}
 <!--			{{#if stateExists}}
 				{{progressBar}}
 				<button type = "submit" class = "btn btn-default" id ="resumeTest">Resume test</button>
@@ -39,6 +39,8 @@
 		{{#each words}}
 			<span class = "label label-default" draggable="true">{{word}}</span>
 		{{/each}}
+
+		<div><img src="/icons/delete-128.png" alt="Delete" width="100" class= "drop-to-delete"></div>
 	</div>
 	
 	{{ > wordSubmitLarge }}

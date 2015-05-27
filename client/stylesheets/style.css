@@ -80,6 +80,10 @@ body {
       text-align: center;
     }
 
+  .drop-to-delete {
+      margin: 10px;
+  }
+
   .post:before, .post:after {
     content: "";
     display: table; }
