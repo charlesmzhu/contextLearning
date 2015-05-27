@@ -92,7 +92,7 @@ Template.deckList.events ( {
 
 	"drop .deck .title": function (e) {
 		var deck = Blaze.getData ( e.target );
-		console.log(deck);
+		console.log ( deck );
 		var wordId = Session.get ( "draggedWord" );
 		console.log(wordId);
 		if ( deck.wordIds.indexOf(wordId) != -1 ) {
