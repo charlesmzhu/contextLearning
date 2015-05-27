@@ -51,8 +51,8 @@ body {
 
   .post .label-default {
     font-size: 18px;
-    padding: 2px;
-    margin: 2px;
+    margin: 10px;
+    display: inline-block;
   }
 
   .post.deck.title{

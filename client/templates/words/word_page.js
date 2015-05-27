@@ -5,7 +5,7 @@ Template.deckList.helpers ( {
 	},
 
 	words: function () {
-		return Words.find();
+		return Words.find( {}, { sort: { createdAt: -1 } });
 	},
 
 	//Figures out if a state has been saved on this collection
