@@ -6,8 +6,11 @@ Tasks to Complete
 	- Show box that says "add a few initial initial descriptors"
 	- Delete word from current Session.
 2. Brainstorm how to implement text box for vocab words
+	- A composition tab that has word to the side - write a composition
 	- A CSS tab that pulls out half way and pushes everything over
 	- Session variable remembers which session you're on
+	- Categorizing "contexts" into "tabs"
+3. Hide context at first and show it later
 
 5/26/2015
 GOOD 1. Edit, delete buttons for trash can. Trash icon.
