@@ -1,36 +1,80 @@
-if (Decks.find().count() == 0 ) {
-  Decks.insert(
-    {
-      title: "Chinese lesson two on weightlifiting and body building",
-      wordIds: []
-    }
-  )
-}
-
 if (Words.find().count() == 0 ) {
-	 Words.insert({
-      word: 'insidious',
+	 var id1, id2, id3, id4, id5;
+   id1 = Random.id();
+   id2 = Random.id();
+   id3 = Random.id();
+   id4 = Random.id();
+   id5 = Random.id();
+
+   Words.insert({
+      _id: id1,
+      word: 'ahora mismo',
       createdAt: new Date (),
       contexts: [
-        "The insidious nature of the EU is such that the majority of British citizens do not even recognize the threat.",
-        "But while gaseous products and even falling water are capable of modifying electrical conditions in their immediate neighbourhood, the 'infection' produced by radium is more insidious, and other drawbacks present themselves in practice."
+        "- Una tapa de tortilla, por favor. - Si, ahora mismo"
       ]
   	});
 
   	Words.insert({
-    	word: '意料',
+      _id: id2,
+    	word: 'merendar',
       createdAt: new Date (),
       contexts: [
-        "出乎意料的新事件",
-        "一切都在我的意料之内",
-        "他的举动在我的意料之中"]
+        "- La amiga de ANa ha telefoneado. - Que queria? - Invitar a los ninos a merendar. Despues podemos irnos al cine."
+      ]
   	});
 
   	Words.insert({
-    	word: 'mississippi',
+      _id: id3,
+    	word: 'semaforo',
     	createdAt: new Date(),
       contexts: [
-        "Ranked the most religious state in the country since 2011", 
-        "Bordered on the north by Tennessee, on the east by Alabama, on the south by Louisiana and a narrow coast on the Gulf of Mexico; and on the west, across the Mississippi River, by Louisiana and Arkansas."]
+        "Cuidado!  El semaforo esta en rojo." 
+      ]
   	});
-} 
+
+    Words.insert({
+      _id: id4,
+      word: 'deprisa',
+      createdAt: new Date(),
+      contexts: ["Deprisa! Necesito suelto por el autobus."],
+    })
+
+    Words.insert({
+      _id: id5,
+      word: 'todavia',
+      createdAt: new Date(),
+      contexts: ["-El primer acto era malisimo. -Y el segundo? -Todavia peor."],
+    })
+
+}
+
+if (Decks.find().count() == 0) {
+  var id6, id7;
+  id6 = Random.id();
+  id7 = Random.id();
+
+  Decks.insert(
+    {
+      _id: id6,
+      title: "Assimil Espanol: Leccion Primera a Septima",
+      createAt: new Date(),
+      wordIds: [id1, id2, id3, id4]
+    }
+  )
+
+  Decks.insert(
+    {
+      _id: id7,
+      title: "Assimil Espanol: Leccion Octava a Catorce",
+      createAt: new Date(),
+      wordIds: [id5]
+    }
+  )
+
+  Words.update ( id1, { $set: { deckIds: [id6] } } );
+  Words.update ( id2, { $set: { deckIds: [id6] } } );
+  Words.update ( id3, { $set: { deckIds: [id6] } } );
+  Words.update ( id4, { $set: { deckIds: [id6] } } );
+  Words.update ( id5, { $set: { deckIds: [id7] } } );
+}
