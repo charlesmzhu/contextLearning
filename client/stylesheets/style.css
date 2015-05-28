@@ -65,9 +65,9 @@ body {
   }
 
   .bigtextbox {
-    border: 2px;
+    background-color: transparent;
+    padding: 10px;
     position: relative;
-    padding: 4px;
     text-align: center;
     vertical-align: center;
     font-family: Helvetica;
@@ -240,4 +240,13 @@ body {
 .full-width {
   width: 100%;
   text-align: center;
+}
+
+#context-submit {
+  font-size: 20px;
+}
+
+.delete-context {
+  float: right;
+  font-size: 14px;
 }

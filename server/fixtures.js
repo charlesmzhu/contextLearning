@@ -9,7 +9,7 @@ if (Decks.find().count() == 0 ) {
 
 if (Words.find().count() == 0 ) {
 	 Words.insert({
-    	word: 'insidious',
+      word: 'insidious',
       createdAt: new Date (),
       contexts: [
         "The insidious nature of the EU is such that the majority of British citizens do not even recognize the threat.",

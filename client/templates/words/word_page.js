@@ -31,15 +31,6 @@ Template.deckList.helpers ( {
 } )
 
 Template.deckList.events ( { 
-	"click .btn.btn-primary": function (e) {
-		Session.set ( "addDeckButtonClicked", true );
-		return false;
-	},
-/*
-	"blur #deck-submit": function ( e ) {
-		Session.set ( "addDeckButtonClicked", false );
-		return false;
-	},*/
 
 	"submit #deck-submit": function ( e ) {
 		e.preventDefault();
@@ -49,14 +40,12 @@ Template.deckList.events ( {
 	},
 
 	"click .beginTest": function ( e ) {
-		var start = parseInt(0);
+		var startIndex = parseInt(0);
 		var wordArray = _.shuffle ( this.wordIds );
-		Decks.update ( this._id , { $set: { wordIds: wordArray } } );
-		Decks.update ( this._id , { $set: { sessionIndex: start } } );
-		Router.go ( '/' + this._id + '/' + Decks.findOne ( this._id, 
-					{ fields: { 'sessionIndex': 1 } } 
-				).sessionIndex 
-			);
+		Meteor.call ( "beginTest", wordArray, this._id );
+		if ( this.wordIds.length < 1 ) { 
+			alert ( "Drop some words in the deck first!" );
+		} else Router.go ( '/' + this._id + '/0' );
 		return false;
 	},
 
@@ -104,24 +93,21 @@ Template.deckList.events ( {
 		} else {
 
 			//Update deck with the wordId
-			Decks.update ( deck._id,
-				{ $push: { wordIds: wordId } },  
-				{ upsert: true } );
+			Meteor.call ( "pushWordIdToDeck", deck._id, wordId);
 
 			//Update the word with deckId
 			var deckIds = Words.findOne ( wordId , 
 					{ fields: { 'deckIds': 1 } } 
 				).deckIds;
 
-				//Check if deckIds exist, e.g. if word has been dropped into deck
-				if ( typeof deckIds == "undefined" ) {
-					var emptyArr;
-					emptyArr = [];
-					Words.update ( wordId , { $set: { deckIds: emptyArr } } );
-				}
+			//Check if deckIds exist, e.g. if word has been dropped into deck
+			if ( typeof deckIds == "undefined" )
+				Meteor.call ( "initializeDeckIds", wordId )
 
-				//Update word with deckId
-				Words.update( wordId, { $push: { deckIds: deck._id } } );	
+			//Update word with deckId
+				
+			
+			Meteor.call ( "pushDeckIdToWord", wordId, deck._id )
 
 			//Get rid of drag-over class
 			$(e.currentTarget).removeClass( "drag-over" );
@@ -141,9 +127,7 @@ Template.deckList.events ( {
 
 	"drop .drop-to-delete": function (e) {
 		var item = Blaze.getData ( e.target );
-		console.log ( item );
 		var itemId = Session.get ( "draggedWord" );
-		console.log(itemId);
 		var alert = confirm("Are you sure you want to delete?");
 		if ( alert == true ) {
 			var deckIds =  Words.findOne ( itemId , 
@@ -151,13 +135,17 @@ Template.deckList.events ( {
 				).deckIds;
 
 			//First removes words from decks
+		if ( typeof deckIds != "undefined" ) {
 			for ( var i = 0 ; i < deckIds.length; i++ ) {
 				Meteor.call ( "removeWordFromDeck", deckIds[i], itemId );
 			}
-
+		}
 			//Then removes word completely
 			Meteor.call ( "removeWord", itemId );
 		}
+
+		$(e.currentTarget).removeClass( "drag-over" );
+
 		return false;
 	},
 
@@ -178,10 +166,7 @@ Template.wordPage.events ( {
 	"click .arrow-right": function ( e ) { // As long as there's another
 		var deckId = Session.get("deckId");
 		if ( Session.get ( "indexOfWord" ) < Session.get ("wordIds").length-1 ) {	
-			Decks.update ( deckId, { $inc : { sessionIndex: parseInt(1) } }, function ( e, d ) {
-				var indexOfWord = Decks.findOne ( deckId, { fields: { "sessionIndex": 1 } } ).sessionIndex;
-				Router.go( "/" + deckId + "/" + indexOfWord );
-			});
+			Meteor.call ( "nextWord", deckId )
 		}
 	},
 
@@ -195,8 +180,9 @@ Template.wordPage.events ( {
 
 	"submit #context-submit": function ( e ) {
 		var text = event.target.text.value;
+		console.log("this: " + this.id)
 		Meteor.call ( "addContext" , this._id, text )
-
+		console.log(this._id);
 		event.target.text.value = "";
 
 		//Meteor.call ( this._id, text );
@@ -219,25 +205,43 @@ Template.wordItem.helpers({
 		var indexOfWord = this.params.indexOfWord;//index of word within the larger deck
 		var deckId = this.params._id;//id of deck
 		
+
 		var wordIds = Decks.findOne ( deckId, //finds the array of wor ids the deck
 					{ fields: { 'wordIds': 1 } } 
 				).wordIds;
-		Decks.update ( deckId, { $set: { sessionIndex: parseInt(indexOfWord) }});
+		
+		Meteor.call ( "setDeckSessionIndexToIndex", deckId, indexOfWord )
+
 		Session.set ( "indexOfWord", parseInt(indexOfWord) );
 		Session.set ( "wordIds", wordIds );
 		Session.set ( "deckId", deckId ); //Should change this to just the URI, don't need to update this
+		
 		var wordId = wordIds[indexOfWord];//gets the specific wordId
-		return Words.findOne ( wordId );
+		Session.set( "wordId", wordId )
+
+		return Words.findOne (wordId );
 	},
 
 
 	wordsInFront: function () { 
 		return parseInt ( Session.get ( "indexOfWord" ) ) < Session.get ("wordIds").length -1 ;
 	},
+
 	wordsInBack: function () {
 		return parseInt ( Session.get ( "indexOfWord" ) ) > 0;
+	},
+
+})
+
+Template.wordItem.events({
+	"click .delete-context": function ( e ) {
+		var wordId = Session.get ( "wordId" );
+		var context = Blaze.getData ( e.target );
+		Meteor.call ( "deleteContextFromWord", wordId, context);
+		return false;
 	}
 })
+
 
 Template.wordSubmit.rendered = function () {
 	$("#word-submit > input[name='text']").focus();
@@ -261,5 +265,3 @@ Template.wordSubmit.events ({
 	},
 
 })
-
-

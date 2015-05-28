@@ -1,6 +1,15 @@
 Tasks to Complete
 
-5/28/2015
+5/27/2015
+1. After adding new word, add a few new contexts
+	- When submitted, remember word via Session.
+	- Show box that says "add a few initial initial descriptors"
+	- Delete word from current Session.
+2. Brainstorm how to implement text box for vocab words
+	- A CSS tab that pulls out half way and pushes everything over
+	- Session variable remembers which session you're on
+
+5/26/2015
 GOOD 1. Edit, delete buttons for trash can. Trash icon.
 2. After adding new word, add a few new contexts
 	- When submitted, remember word via Session.
@@ -11,7 +20,7 @@ GOOD 1. Edit, delete buttons for trash can. Trash icon.
 	- Session variable remembers which session you're on
 GOOD 4. Prevent identical submission of words
 5. Error empty deck
-6. Be able to remove words from deck.
+GOOD 6. Be able to remove words from deck.
 
 5/16/2015
 Things are shaping up. Remaining to-do list:
