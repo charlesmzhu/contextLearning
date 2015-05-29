@@ -165,7 +165,7 @@ Template.wordPage.events ( {
 
 	"click .show-examples": function ( e ) {
 		e.preventDefault();
-		if ( Session.get ("contextIndex ") ) 
+		if ( Session.get ("contextIndex") ) 
 			Session.set ( "contextIndex", Session.get("contextIndex") + 1 );
 		else Session.set("contextIndex", 1)
 	},
