@@ -81,11 +81,13 @@
       	{{/if}}
     		{{ word }}
     </h1>
-    
-        {{#each contexts}}
+<!-- This fetches contexts up to the number of times get contexts has been clicked -->    
+	<button class = "label label-default show-examples">More examples</button>
+
+        {{#each examples}}
 	    
-        <div class="post post-content large">{{this ../..}} <span class="delete-context">x</span> </div>
-	    
+        	<div class="post post-content large">{{this}} <span class="delete-context">x</span> </div>
+
         {{/each}}
     
     	{{ > contextSubmit }}

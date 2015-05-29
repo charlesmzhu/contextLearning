@@ -163,11 +163,19 @@ Template.wordSubmitLarge.events ({
 
 Template.wordPage.events ( { 
 
+	"click .show-examples": function ( e ) {
+		e.preventDefault();
+		if ( Session.get ("contextIndex ") ) 
+			Session.set ( "contextIndex", Session.get("contextIndex") + 1 );
+		else Session.set("contextIndex", 1)
+	},
+
 	"click .arrow-right": function ( e ) { // As long as there's another
 		var deckId = Session.get("deckId");
 		if ( Session.get ( "indexOfWord" ) < Session.get ("wordIds").length-1 ) {	
 			Meteor.call ( "nextWord", deckId )
 		}
+		Session.set("contextIndex", 0);
 	},
 
 	"click .arrow-left": function ( e ) { // As long as there's another
@@ -176,6 +184,7 @@ Template.wordPage.events ( {
 			var prevIndex = Session.get("indexOfWord") - 1;
 			Router.go("/" + deckId + "/" + prevIndex);//Can probably do this via route paths
 		}
+		Session.set("contextIndex", 0);
 	},
 
 	"submit #context-submit": function ( e ) {
@@ -230,6 +239,11 @@ Template.wordItem.helpers({
 	wordsInBack: function () {
 		return parseInt ( Session.get ( "indexOfWord" ) ) > 0;
 	},
+
+	examples: function () {
+		if ( Session.get ("contextIndex") )
+			return this.contexts.slice(0, Session.get ("contextIndex"));
+	}
 
 })
 
