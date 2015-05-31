@@ -1,0 +1,42 @@
+<template name="wordPage">
+    <div class="post">
+    	<div class = "icons">
+		</div>
+      {{ > wordItem }}
+    </div>
+</template>
+
+
+<template name="wordItem">
+    {{#with wordObj}}
+    <h1>
+    	{{#if wordsInFront }}
+	  		<div class = "arrow-right" ></div>
+      	{{/if}}
+
+      	{{#if wordsInBack }}
+      		<div class = "arrow-left" ></div>
+      	{{/if}}
+    		{{ word }}
+    </h1>
+	<button class = "label label-default show-examples">More examples</button>
+        {{#each examples}}
+        	<div class="post post-content large">{{this}} <span class="delete-context">x</span> </div>
+        {{/each}}
+    	{{ > contextSubmit }}
+    {{ /with }}
+</template>
+
+<template name="wordSubmit">
+	<form id = "word-submit">
+          <input id ="word-submit-text" type="text" name="text" placeholder="Type to add new word" class ="full-width" />
+          <input type = "submit" value = "Add word" >
+    </form>
+</template>
+
+
+<template name = "contextSubmit">
+	<form id = "context-submit" class = "center">
+          <input type="text" name="text" placeholder="Type to add a new context" class ="full-width"/>
+    </form>
+</template>
