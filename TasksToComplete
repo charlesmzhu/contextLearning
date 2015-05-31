@@ -12,6 +12,8 @@ Tasks to Complete
 	- A CSS tab that pulls out half way and pushes everything over
 	- Session variable remembers which session you're on
 	- Categorizing "contexts" into "tabs"
+5. When two people are on the same session simulatenously, the shuffle happens as two people begin the same test - make the shuffle on the Session only!
+
 
 5/27/2015
 1. After adding new word, add a few new contexts

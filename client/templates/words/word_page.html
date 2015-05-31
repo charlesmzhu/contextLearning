@@ -28,25 +28,34 @@
 		  			<img src="/icons/delete-128.png" alt="Delete" width="30" class= "deleteDeck">
 	  			</span>
 			</div>
-			
 <!--			{{/if}}-->
 			
 		{{/each}}
 	</div>
 
 	<div class = "post col-sm-4">
-		<div>Drag a word to its deck!</div>
+		<div>Drag a word to its deck! <a id="show-all-words" style="cursor:pointer">All</a></div>
+		<div><img src="/icons/delete-128.png" alt="Delete" width="60" class= "drop-to-delete"></div>
 		{{#each words}}
-			<span class = "label label-default" draggable="true">{{word}}</span>
+			<button class = "label label-default" draggable="true">{{word}}</button>
 		{{/each}}
 
-		<div><img src="/icons/delete-128.png" alt="Delete" width="100" class= "drop-to-delete"></div>
+		
 	</div>
 	
 	{{ > wordSubmitLarge }}
-	
+	{{ > mainbox }}
 
 </template>
+
+<template name = "mainbox">
+	<div class = "post col-sm-8 mainbox">
+		{{#with displayObj}}
+			{{word}}
+		{{/with}}
+	</div>
+</template>
+
 
 <template name = "wordSubmitLarge">
 	<form class="bigtextbox post col-sm-8">

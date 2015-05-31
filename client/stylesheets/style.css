@@ -58,6 +58,7 @@ body {
   .post.deck.title{
     position: relative;
     text-align: left;
+    cursor: pointer;
   }
 
   .post.deck.title form {
@@ -249,4 +250,14 @@ body {
 .delete-context {
   float: right;
   font-size: 14px;
+}
+
+.mainbox {
+  padding: 10px;
+  position: relative;
+  text-align: center;
+  vertical-align: center;
+  font-family: Helvetica;
+  font-size: 50px;
+  outline: none;
 }

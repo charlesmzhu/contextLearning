@@ -1,11 +1,15 @@
 Template.deckList.helpers ( {
 	decks: function () { 
-		Session.set("addDeckButtonClicked", false)
 		return Decks.find(); 
 	},
 
 	words: function () {
-		return Words.find( {}, { sort: { createdAt: -1 } });
+		var wordIdArray = Session.get ( "selectedDeckWordIds" );
+		if ( wordIdArray.length >= 1 ) {
+			console.log(wordIdArray._id);
+			return Words.find( { '_id': { $in: wordIdArray } }, { sort: { createdAt: -1 } });
+		}
+		else return Words.find( {}, { sort: { createdAt: -1 } } );
 	},
 
 	//Figures out if a state has been saved on this collection
@@ -22,11 +26,15 @@ Template.deckList.helpers ( {
 					{ fields: { 'sessionIndex': 1 } } 
 				).sessionIndex;
 	},
-/*
-	addDeckButtonClicked : function() {
-		return Session.get ( "addDeckButtonClicked" );
-	}
-*/
+
+} )
+
+Template.mainbox.helpers ( {
+
+	displayObj: function ( e ) {
+		Session.get ( "displayInMainBox" );
+		return Session.get ( "displayInMainBox" );
+	},
 
 } )
 
@@ -36,6 +44,7 @@ Template.deckList.events ( {
 		e.preventDefault();
 		var text = e.target.text.value;
 		Meteor.call ( "addDeck" , text );
+		e.target.text.value = "";
 		return false;
 	},
 
@@ -46,6 +55,11 @@ Template.deckList.events ( {
 		if ( this.wordIds.length < 1 ) { 
 			alert ( "Drop some words in the deck first!" );
 		} else Router.go ( '/' + this._id + '/0' );
+		return false;
+	},
+
+	"click .label-default": function ( e ) {
+		Session.set ( "displayInMainBox", Blaze.getData ( e.target ) );
 		return false;
 	},
 
@@ -115,6 +129,11 @@ Template.deckList.events ( {
 		return false;	
 	},
 
+	"click .deck .title" : function ( e ) {
+		Session.set ( "selectedDeckWordIds", Blaze.getData ( e.target ).wordIds );
+		return false;
+	},
+
 	'dragover .drop-to-delete' : function ( e ) {
 		e.preventDefault();
 		$(e.currentTarget).addClass ( "drag-over" );
@@ -149,20 +168,27 @@ Template.deckList.events ( {
 		return false;
 	},
 
+	"click #show-all-words": function ( e ) {
+		Session.set ( "selectedDeckWordIds", {} )
+	}
+
 } );
 
 Template.wordSubmitLarge.events ({
 	"submit .bigtextbox": function ( e ) {
 		e.preventDefault();
 		var text = e.target.word.value;
-		console.log(text);
-		Meteor.call ( "addWord" , text );
+		var test = Meteor.call ( "addWord" , text, function ( err, data ) {
+			console.log ( Words.find( data ).fetch()[0] ) ; 
+			Session.set ( "displayInMainBox", Words.find( data ).fetch()[0] );
+		} );
+		e.target.word.value = "";
+//		Session.set ( "", );
 		return false;
 	}
 })
 
 Template.wordPage.events ( { 
-
 	"click .show-examples": function ( e ) {
 		e.preventDefault();
 		if ( Session.get ("contextIndex") ) 
