@@ -2,15 +2,16 @@
     <div class="post">
     	<div class = "icons">
 		</div>
-      {{ > wordItem }}
+      {{#with wordObj}}
+        {{ > wordItem }}
+      {{/with}}
     </div>
 </template>
 
 
 <template name="wordItem">
-    {{#with wordObj}}
     <h1>
-    	{{#if wordsInFront }}
+    	  {{#if wordsInFront }}
 	  		<div class = "arrow-right" ></div>
       	{{/if}}
 
@@ -24,7 +25,6 @@
         	<div class="post post-content large">{{this}} <span class="delete-context">x</span> </div>
         {{/each}}
     	{{ > contextSubmit }}
-    {{ /with }}
 </template>
 
 <template name="wordSubmit">

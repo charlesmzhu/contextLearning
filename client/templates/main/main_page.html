@@ -1,7 +1,6 @@
 <template name = "mainPage">
 	{{ > deckList }}
 	{{ > wordColumn }}
-	{{ > wordSubmitLarge }}
 	{{ > mainBox }}
 </template>
 
@@ -39,6 +38,10 @@
 <template name = "wordColumn">
 	<div class = "post col-sm-4">
 		<div>Drag a word to its deck! <a id="show-all-words" style="cursor:pointer">All</a></div>
+		<form class = "new-word">
+			<input type="text" name="word" placeholder="Add new word">
+			<button type ="submit">Submit</button>
+		</form>
 		<div><img src="/icons/delete-128.png" alt="Delete" width="60" class= "drop-to-delete"></div>
 		{{#each words}}
 			<button class = "label label-default" draggable="true">{{word}}</button>
@@ -48,8 +51,8 @@
 
 <template name = "mainBox">
 	<div class = "post col-sm-8 mainbox">
-		{{#with obj}}
-			{{word}}
+		{{#with wordObj}}
+			{{ > wordItem }}
 		{{/with}}
 	</div>
 </template>

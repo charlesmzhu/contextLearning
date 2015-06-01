@@ -65,6 +65,10 @@ body {
     text-align: right;
   }
 
+  .new-word {
+    font-size: 24px;
+  }
+
   .bigtextbox {
     background-color: transparent;
     padding: 10px;

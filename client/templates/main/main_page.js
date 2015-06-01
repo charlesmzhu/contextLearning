@@ -84,6 +84,7 @@ Template.deckList.events ( {
 		Session.set ( "selectedDeckWordIds", Blaze.getData ( e.target ).wordIds );
 		return false;
 	},
+
 } );
 
 Template.wordColumn.helpers ( { 
@@ -101,6 +102,7 @@ Template.wordColumn.events ( {
 	//Click on word to show in big box
 	"click .label-default": function ( e ) {
 		Session.set ( "displayInMainBox", Blaze.getData ( e.target ) );
+		Session.set ( "contextIndex", 0 )
 		return false;
 	},
 
@@ -116,12 +118,56 @@ Template.wordColumn.events ( {
 		Session.set ( "selectedDeckWordIds", undefined )
 	},
 
+	'dragover .drop-to-delete' : function ( e ) {
+		e.preventDefault();
+		$(e.currentTarget).addClass ( "drag-over" );
+	},
+
+	'dragleave .drop-to-delete' : function( e ) {
+		e.preventDefault();
+    	$(e.currentTarget).removeClass( "drag-over" );
+  	},
+
+  	"drop .drop-to-delete": function (e) {
+		var item = Blaze.getData ( e.target );
+		var itemId = Session.get ( "draggedWord" );
+		var alert = confirm("Are you sure you want to delete?");
+		if ( alert == true ) {
+			var deckIds =  Words.findOne ( itemId , 
+					{ fields: { 'deckIds': 1 } } 
+				).deckIds;
+
+		//First removes words from decks
+		if ( typeof deckIds != "undefined" ) {
+			for ( var i = 0 ; i < deckIds.length; i++ )
+				Meteor.call ( "removeWordFromDeck", deckIds[i], itemId );
+		}
+			//Then removes word completely
+			Meteor.call ( "removeWord", itemId );
+		}
+
+		$(e.currentTarget).removeClass( "drag-over" );
+
+		return false;
+	},
+
+	"submit .new-word": function ( e ) {
+		e.preventDefault();
+		console.log("test");
+		var text = e.target.word.value;
+		var test = Meteor.call ( "addWord" , text, function ( err, data ) {
+			Session.set ( "displayInMainBox", Words.find( data ).fetch()[0] );
+		} );
+		e.target.word.value = "";
+		return false;
+	}
+
 } )
 
 Template.mainBox.helpers ( {
 	
 	//Object to be displayed in main box
-	obj: function ( e ) {
+	wordObj: function ( e ) {
 		return Session.get ( "displayInMainBox" );
 	},
 } )
@@ -137,4 +183,3 @@ Template.wordSubmitLarge.events ({
 		return false;
 	}
 })
-
