@@ -28,14 +28,6 @@ Template.wordPage.helpers({
 		return Words.findOne (wordId );
 	},
 
-	wordsInFront: function () { 
-		return parseInt ( Session.get ( "indexOfWord" ) ) < Session.get ("wordIds").length -1 ;
-	},
-
-	wordsInBack: function () {
-		return parseInt ( Session.get ( "indexOfWord" ) ) > 0;
-	},
-
 })
 
 Template.wordItem.helpers({
@@ -43,7 +35,16 @@ Template.wordItem.helpers({
 	examples: function () {
 		if ( Session.get ("contextIndex") )
 			return this.contexts.slice(0, Session.get ("contextIndex"));
-	}
+	},
+
+	wordsInFront: function () { 
+		console.log(Session.get ( "indexOfWord" ) < Session.get ( "wordIds" ).length - 1);
+		return parseInt ( Session.get ( "indexOfWord" ) ) < Session.get ( "wordIds" ).length - 1 ;
+	},
+
+	wordsInBack: function () {
+		return parseInt ( Session.get ( "indexOfWord" ) ) > 0;
+	},
 
 });
 
