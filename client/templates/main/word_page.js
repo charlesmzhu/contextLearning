@@ -38,7 +38,6 @@ Template.wordItem.helpers({
 	},
 
 	wordsInFront: function () { 
-		console.log(Session.get ( "indexOfWord" ) < Session.get ( "wordIds" ).length - 1);
 		return parseInt ( Session.get ( "indexOfWord" ) ) < Session.get ( "wordIds" ).length - 1 ;
 	},
 
@@ -48,28 +47,44 @@ Template.wordItem.helpers({
 
 });
 
-Template.wordPage.events ( { 
+Template.wordItem.events({
 
 	"click .arrow-right": function ( e ) {
-		var deckId = Session.get("deckId");
-		if ( Session.get ( "indexOfWord" ) < Session.get ("wordIds").length-1 ) {	
-			Meteor.call ( "nextWord", deckId )
+		if ( Router.current().route.path(this) == "/") {
+			// Get current index of word and increment. Reset contexts.
+			var indexOfWord = Session.get("indexOfWord");
+			Session.set("indexOfWord", indexOfWord + 1);
+			Session.set( "contextIndex", 0);
+
+			// Get new index of word and change the view.
+			indexOfWord = Session.get("indexOfWord")
+			Session.set ( "displayInMainBox", Words.find( Session.get ( "wordIds")[indexOfWord] ).fetch()[0] );
+		} else {
+			var deckId = Session.get("deckId");
+			if ( Session.get ( "indexOfWord" ) < Session.get ("wordIds").length-1 ) {	
+				Meteor.call ( "nextWord", deckId )
+			}
+			Session.set("contextIndex", 0);
 		}
-		Session.set("contextIndex", 0);
 	},
 
 	"click .arrow-left": function ( e ) { // As long as there's another
-		var deckId = Session.get("deckId");
-		if ( Session.get ( "indexOfWord" ) > 0 ) {	
-			var prevIndex = Session.get("indexOfWord") - 1;
-			Router.go("/" + deckId + "/" + prevIndex);//Can probably do this via route paths
+		if ( Router.current().route.path(this) == "/") {
+			var indexOfWord = Session.get("indexOfWord");
+			Session.set("indexOfWord", indexOfWord - 1);
+			Session.set("contextIndex", 0);
+
+			indexOfWord = Session.get("indexOfWord")
+			Session.set ( "displayInMainBox", Words.find( Session.get ( "wordIds")[indexOfWord] ).fetch()[0] );
+		} else {
+			var deckId = Session.get("deckId");
+			if ( Session.get ( "indexOfWord" ) > 0 ) {	
+				var prevIndex = Session.get("indexOfWord") - 1;
+				Router.go("/" + deckId + "/" + prevIndex);//Can probably do this via route paths
+			}
+			Session.set("contextIndex", 0);
 		}
-		Session.set("contextIndex", 0);
 	},
-
-} )
-
-Template.wordItem.events({
 
 	//Click to show more examples. contextIndex tracks # of times clicked and helper array is shown.
 	"click .show-examples": function ( e ) {

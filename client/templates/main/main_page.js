@@ -8,7 +8,7 @@ draggedWord: Id of word being dragged. Drag-and-drop words to delete or insert t
 
 Template.deckList.helpers ( {
 	decks: function () { 
-		return Decks.find(); 
+		return Decks.find();
 	},
 } );
 
@@ -81,7 +81,8 @@ Template.deckList.events ( {
   	},
 
 	"click .deck .title" : function ( e ) {
-		Session.set ( "selectedDeckWordIds", Blaze.getData ( e.target ).wordIds );
+		Session.set ( "wordIds", Blaze.getData ( e.target ).wordIds );
+		Session.set( "indexOfWord", 0 );
 		return false;
 	},
 
@@ -90,10 +91,18 @@ Template.deckList.events ( {
 Template.wordColumn.helpers ( { 
 	//Displays words of clicked deck via Sessions variable. If no deck has been clicked, returns all words.
 	words: function () {
-		var wordIdArray = Session.get ( "selectedDeckWordIds" );
-		if ( typeof wordIdArray != "undefined" )
-			return Words.find( { '_id': { $in: wordIdArray } }, { sort: { createdAt: -1 } });
-		else return Words.find( {}, { sort: { createdAt: -1 } } );
+		var words;
+		var wordIds = Session.get ( "wordIds" );
+		if ( typeof wordIds != "undefined" ) {
+			words = Words.find( { '_id': { $in: wordIds } }, { sort: { createdAt: -1 } } );
+		} else {
+			words = Words.find( {}, { sort: { createdAt: -1 } } );
+			wordIds = words.map ( function ( item ) { return item._id } )
+			Session.set( "wordIds", wordIds);
+			Session.set( "indexOfWord", 0 );
+		};
+		Session.set ( "displayInMainBox", Words.find( Session.get("wordIds")[0] ).fetch()[0] );
+		return words;
 	},
 } )
 
@@ -101,8 +110,12 @@ Template.wordColumn.events ( {
 
 	//Click on word to show in big box
 	"click .label-default": function ( e ) {
+		var wordId = Blaze.getData ( e.target )._id;
+		var wordIds = Session.get("wordIds");
+		Session.set ( "wordId", wordId );
 		Session.set ( "displayInMainBox", Blaze.getData ( e.target ) );
-		Session.set ( "contextIndex", 0 )
+		Session.set ( "contextIndex", 0 );
+		Session.set ( "indexOfWord", wordIds.indexOf ( wordId ) );
 		return false;
 	},
 
