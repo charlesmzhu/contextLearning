@@ -94,7 +94,7 @@ Template.wordColumn.helpers ( {
 		var words;
 		var wordIds = Session.get ( "wordIds" );
 		if ( typeof wordIds != "undefined" ) {
-			words = Words.find( { '_id': { $in: wordIds } }, { sort: { createdAt: -1 } } );
+			words = Words.find( { '_id': { $in: wordIds } }, { sort: { createdAt: -1 } } )
 		} else {
 			words = Words.find( {}, { sort: { createdAt: -1 } } );
 			wordIds = words.map ( function ( item ) { return item._id } )
@@ -128,7 +128,11 @@ Template.wordColumn.events ( {
 
 	//Shows all words by setting the wordIds associated with a deck to undefined
 	"click #show-all-words": function ( e ) {
-		Session.set ( "selectedDeckWordIds", undefined )
+		words = Words.find( {}, { sort: { createdAt: -1 } } );
+		wordIds = words.map ( function ( item ) { return item._id } )
+		Session.set( "wordIds", wordIds);
+		Session.set( "indexOfWord", 0 );
+		Session.set ( "wordIds", wordIds );	
 	},
 
 	'dragover .drop-to-delete' : function ( e ) {
