@@ -1,9 +1,9 @@
 /*Sessions variables:
 
-selectedDeckWordIds: Display words within a deck when it is clicked.
-displayInMainBox: Show word within the Main Box when it is clicked.
+wordIds: Array of wordIds to be displayed.
+displayInMainBox: Word cursor to be displayed in Main Box when clicked.
 draggedWord: Id of word being dragged. Drag-and-drop words to delete or insert them in deck.
-
+indexOfWord: Index of active word within wordIds.
 */
 
 Template.deckList.helpers ( {
@@ -43,7 +43,7 @@ Template.deckList.events ( {
 		var deck = Blaze.getData ( e.target );
 		var wordId = Session.get ( "draggedWord" );
 		if ( deck.wordIds.indexOf(wordId) != -1 ) {
-			alert("Word is already in deck!");
+			throwError("Word is already in deck!");
 		} else {
 			Meteor.call ( "pushWordIdToDeck", deck._id, wordId);
 			var deckIds = Words.findOne ( wordId , { fields: { 'deckIds': 1 } }	).deckIds;

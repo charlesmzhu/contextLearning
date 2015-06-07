@@ -1,9 +1,9 @@
 <head>
-	<title>Contextual</title>
+  <title>Contextual</title>
 </head>
 
 <template name = "layout">
-	<div class="container">
+  <div class="container">
     {{ > header}}
     <div id="main">
       {{> yield}}
@@ -12,5 +12,20 @@
 </template>
 
 <template name = "loading">
-	{{ > spinner }}
+  {{ > spinner }}
+</template>
+
+<template name="errors">
+  <div class="errors">
+    {{#each errors}}
+      {{> error}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="error">
+  <div class="alert alert-danger" role="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{message}}
+  </div>
 </template>
