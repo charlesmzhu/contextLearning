@@ -7,6 +7,7 @@ Session variables:
 	wordId
 */
 
+//
 Template.wordPage.helpers({
 
 	wordObj: function () {

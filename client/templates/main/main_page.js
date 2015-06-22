@@ -94,13 +94,14 @@ Template.wordColumn.helpers ( {
 		var words;
 		var wordIds = Session.get ( "wordIds" );
 		if ( typeof wordIds != "undefined" ) {
-			words = Words.find( { '_id': { $in: wordIds } }, { sort: { createdAt: -1 } } )
+			words = Words.find( { '_id': { $in: wordIds } }, { sort: { createdAt: -1 } } );
 		} else {
 			words = Words.find( {}, { sort: { createdAt: -1 } } );
 			wordIds = words.map ( function ( item ) { return item._id } )
 			Session.set( "wordIds", wordIds);
 			Session.set( "indexOfWord", 0 );
 		};
+		console.log(wordIds);
 		Session.set ( "displayInMainBox", Words.find( Session.get("wordIds")[0] ).fetch()[0] );
 		return words;
 	},
@@ -146,21 +147,26 @@ Template.wordColumn.events ( {
   	},
 
   	"drop .drop-to-delete": function (e) {
-		var item = Blaze.getData ( e.target );
-		var itemId = Session.get ( "draggedWord" );
+		var word = Blaze.getData ( e.target );
+		var wordId = Session.get ( "draggedWord" );
 		var alert = confirm("Are you sure you want to delete?");
 		if ( alert == true ) {
-			var deckIds =  Words.findOne ( itemId , 
+			var deckIds =  Words.findOne ( wordId , 
 					{ fields: { 'deckIds': 1 } } 
 				).deckIds;
 
-		//First removes words from decks
-		if ( typeof deckIds != "undefined" ) {
-			for ( var i = 0 ; i < deckIds.length; i++ )
-				Meteor.call ( "removeWordFromDeck", deckIds[i], itemId );
-		}
+			//First removes words from decks as long as deckIds is present
+			if ( typeof deckIds != "undefined" ) {
+				for ( var i = 0 ; i < deckIds.length; i++ )
+					Meteor.call ( "removeWordFromDeck", deckIds[i], wordId );
+			}
+
+			//Then updates Session variable of wordIds to delete wordId  
+			var wordIds = Session.get ( "wordIds" );
+			wordIds.splice ( wordIds.indexOf ( wordId ), 1 )
+
 			//Then removes word completely
-			Meteor.call ( "removeWord", itemId );
+			Meteor.call ( "removeWord", wordId );
 		}
 
 		$(e.currentTarget).removeClass( "drag-over" );
@@ -169,11 +175,10 @@ Template.wordColumn.events ( {
 	},
 
 	"submit .new-word": function ( e ) {
-		e.preventDefault();
-		console.log("test");
 		var text = e.target.word.value;
-		var test = Meteor.call ( "addWord" , text, function ( err, data ) {
+		Meteor.call ( "addWord" , text, function ( err, data ) {
 			Session.set ( "displayInMainBox", Words.find( data ).fetch()[0] );
+			Session.set ( "wordIds", Words.find({}, {_id:1}).map(function(word){ return word._id; }) );
 		} );
 		e.target.word.value = "";
 		return false;
