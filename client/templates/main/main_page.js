@@ -101,7 +101,6 @@ Template.wordColumn.helpers ( {
 			Session.set( "wordIds", wordIds);
 			Session.set( "indexOfWord", 0 );
 		};
-		console.log(wordIds);
 		Session.set ( "displayInMainBox", Words.find( Session.get("wordIds")[0] ).fetch()[0] );
 		return words;
 	},

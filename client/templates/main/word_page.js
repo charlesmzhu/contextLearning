@@ -51,6 +51,7 @@ Template.wordItem.helpers({
 Template.wordItem.events({
 
 	"click .arrow-right": function ( e ) {
+		//Main page behavior needs its own logic because next word doesn't work
 		if ( Router.current().route.path(this) == "/") {
 			// Get current index of word and increment. Reset contexts.
 			var indexOfWord = Session.get("indexOfWord");
@@ -96,7 +97,7 @@ Template.wordItem.events({
 	},
 
 	"click .delete-context": function ( e ) {
-		var wordId = Session.get ( "wordId" );
+		var wordId = Template.currentData()._id;
 		var context = Blaze.getData ( e.target );
 		Meteor.call ( "deleteContextFromWord", wordId, context);
 		return false;
@@ -104,8 +105,10 @@ Template.wordItem.events({
 
 	"submit #context-submit": function ( e ) {
 		var text = event.target.text.value;
-		Meteor.call ( "addContext" , this._id, text );
-		console.log(this._id);
+		var thisWordId = this._id;
+		Meteor.call ( "addContext" , thisWordId, text, function ( err ) {
+			Session.set ( "contextIndex", Words.find ( thisWordId, { fields: { "contexts": 1 } } ).fetch()[0].contexts.length );
+		} );		
 		event.target.text.value = "";
 		return false;
 	},
