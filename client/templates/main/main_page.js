@@ -101,7 +101,9 @@ Template.wordColumn.helpers ( {
 			Session.set( "wordIds", wordIds);
 			Session.set( "indexOfWord", 0 );
 		};
-		Session.set ( "displayInMainBox", Words.find( Session.get("wordIds")[0] ).fetch()[0] );
+
+		Session.set("displayInMainBox", words.fetch()[0] );
+
 		return words;
 	},
 } )
@@ -176,7 +178,8 @@ Template.wordColumn.events ( {
 	"submit .new-word": function ( e ) {
 		var text = e.target.word.value;
 		Meteor.call ( "addWord" , text, function ( err, data ) {
-			Session.set ( "displayInMainBox", Words.find( data ).fetch()[0] );
+			var data = Words.find( data ).fetch()[0];
+			console.log(data);
 			Session.set ( "wordIds", Words.find({}, {_id:1}).map(function(word){ return word._id; }) );
 		} );
 		e.target.word.value = "";
@@ -192,7 +195,7 @@ Template.mainBox.helpers ( {
 		return Session.get ( "displayInMainBox" );
 	},
 } )
-
+/*
 Template.wordSubmitLarge.events ({
 	"submit .bigtextbox": function ( e ) {
 		e.preventDefault();
@@ -204,3 +207,4 @@ Template.wordSubmitLarge.events ({
 		return false;
 	}
 })
+*/
